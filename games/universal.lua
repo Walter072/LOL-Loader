@@ -24,8 +24,13 @@ local window = ui.newWindow({
     )
 })
 
-local mainMenu = window:addMenu({ text = 'Main' })
-local vulnerabilitiesMenu = window:addMenu({ text = 'Vulnerabilities' })
+local mainMenu = window:addMenu({
+     text = 'Main' 
+    })
+
+local vulnerabilitiesMenu = window:addMenu({
+     text = 'Vulnerabilities' 
+    })
 
 local section1 = mainMenu:addSection({
     text = 'Player',
@@ -447,9 +452,3 @@ section2:addToggle({
         stopAutoDelete()
     end
 end)
-
-ui.notify({
-    title = 'LOL HUB/Universal',
-    message = 'Script Loaded',
-    duration = 3
-})
