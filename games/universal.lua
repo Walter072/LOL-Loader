@@ -98,11 +98,6 @@ local function startFly()
     end)
 end
 
-local flyToggle = section1:addToggle({
-    text = 'Fly (use key F)',
-    state = false
-})
-
 flyToggle:bindToEvent('onToggle', function(state)
     if state then
         startFly()
