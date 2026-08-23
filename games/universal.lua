@@ -1,9 +1,10 @@
 local uiLoader = loadstring(game:HttpGet('https://raw.githubusercontent.com/topitbopit/dollarware/main/library.lua'))
 local ui = uiLoader({
     rounding = false,
-    theme = 'lime', 
+    theme = 'lime',
     smoothDragging = false
 })
+
 local size = Vector2.new(550, 376)
 local viewport = workspace.CurrentCamera.ViewportSize
 
@@ -12,16 +13,13 @@ local window = ui.newWindow({
     resize = true,
     size = size,
     position = Vector2.new(
-        (viewport.X - size.X) / 2,  
-        (viewport.Y - size.Y) / 2   
+        (viewport.X - size.X) / 2,
+        (viewport.Y - size.Y) / 2
     )
 })
-local mainMenu = window:addMenu({
-    text = "Main"
-})
-local section1 = mainMenu:addSection({
-    text = "Player"
-})
+
+local mainMenu = window:addMenu({ text = 'Main' })
+local section1 = mainMenu:addSection({ text = 'Player' })
 
 local Players = game:GetService('Players')
 local RunService = game:GetService('RunService')
@@ -72,12 +70,14 @@ local function startFly()
     bodyVel.Parent = hrp
 
     flyConn = RunService.RenderStepped:Connect(function()
-        if not flyEnabled or not hrp.Parent then
+        if not flyEnabled or not hrp or not hrp.Parent then
             stopFly()
             return
         end
 
         local cam = workspace.CurrentCamera
+        if not cam then return end
+
         local dir = Vector3.zero
         local look = cam.CFrame.LookVector
         local right = cam.CFrame.RightVector
@@ -93,18 +93,27 @@ local function startFly()
             dir = dir.Unit * flySpeed
         end
 
-        bodyVel.Velocity = dir
-        bodyGyro.CFrame = cam.CFrame
+        if bodyVel then bodyVel.Velocity = dir end
+        if bodyGyro then bodyGyro.CFrame = cam.CFrame end
     end)
 end
+
+local flyToggle = section1:addToggle({
+    text = 'Fly (Key: F)',
+    state = false
+})
 
 flyToggle:bindToEvent('onToggle', function(state)
     if state then
         startFly()
-        ui.notify({ title = 'Fly', message = 'ON', duration = 2 })
+        pcall(function()
+            ui.notify({ title = 'Fly', message = 'ON', duration = 2 })
+        end)
     else
         stopFly()
-        ui.notify({ title = 'Fly', message = 'OFF', duration = 2 })
+        pcall(function()
+            ui.notify({ title = 'Fly', message = 'OFF', duration = 2 })
+        end)
     end
 end)
 
@@ -118,6 +127,20 @@ section1:addSlider({
     flySpeed = val
 end)
 
+section1:addSlider({
+    text = 'WalkSpeed',
+    min = 16,
+    max = 135,
+    step = 1,
+    val = 16
+}, function(val)
+    local char = LocalPlayer.Character
+    local hum = char and char:FindFirstChildOfClass('Humanoid')
+    if hum then
+        hum.WalkSpeed = val
+    end
+end)
+
 UserInputService.InputBegan:Connect(function(input, gameProcessed)
     if gameProcessed then return end
     if input.KeyCode ~= FLY_KEY then return end
@@ -125,11 +148,15 @@ UserInputService.InputBegan:Connect(function(input, gameProcessed)
     if flyEnabled then
         stopFly()
         pcall(function() flyToggle:setState(false) end)
-        ui.notify({ title = 'Fly', message = 'OFF', duration = 2 })
+        pcall(function()
+            ui.notify({ title = 'Fly', message = 'OFF', duration = 2 })
+        end)
     else
         startFly()
         pcall(function() flyToggle:setState(true) end)
-        ui.notify({ title = 'Fly', message = 'ON', duration = 2 })
+        pcall(function()
+            ui.notify({ title = 'Fly', message = 'ON', duration = 2 })
+        end)
     end
 end)
 
@@ -139,16 +166,3 @@ LocalPlayer.CharacterAdded:Connect(function()
         startFly()
     end
 end)
-
-section1:addSlider({
-    text = "WalkSpeed",
-    min = 16,
-    max = 135,
-    value = 16,
-    callback = function(value)
-        local _, hum = getHRP()
-        if hum then
-            hum.WalkSpeed = value
-        end
-    end
-})
