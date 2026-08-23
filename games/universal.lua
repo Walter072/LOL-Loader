@@ -117,7 +117,7 @@ flyToggle:bindToEvent('onToggle', function(state)
     end
 end)
 
-section1:addSlider({
+local Slider = section1:addSlider({
     text = 'Fly Speed',
     min = 10,
     max = 200,
@@ -127,7 +127,7 @@ section1:addSlider({
     flySpeed = val
 end)
 
-section1:addSlider({
+local Slider = section1:addSlider({
     text = 'WalkSpeed',
     min = 16,
     max = 135,
