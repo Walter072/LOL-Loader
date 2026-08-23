@@ -5,8 +5,14 @@ local ui = uiLoader({
     smoothDragging = false
 })
 
+local Players = game:GetService('Players')
+local RunService = game:GetService('RunService')
+local UserInputService = game:GetService('UserInputService')
+local LocalPlayer = Players.LocalPlayer
+
 local size = Vector2.new(550, 376)
-local viewport = workspace.CurrentCamera.ViewportSize
+local cam = workspace.CurrentCamera
+local viewport = (cam and cam.ViewportSize) or Vector2.new(1920, 1080)
 
 local window = ui.newWindow({
     text = 'LOL HUB / Universal',
@@ -18,24 +24,18 @@ local window = ui.newWindow({
     )
 })
 
-local mainMenu = window:addMenu({
-     text = 'Main' 
-    })
-
-local vulnerabilitiesMenu = window:addMenu({
-     text = 'Vulnerabilities' 
-    })
+local mainMenu = window:addMenu({ text = 'Main' })
+local vulnerabilitiesMenu = window:addMenu({ text = 'Vulnerabilities' })
 
 local section1 = mainMenu:addSection({
-     text = 'Player' 
-     side = 'Left'
-    })
+    text = 'Player',
+    side = 'left'
+})
 
 local section2 = vulnerabilitiesMenu:addSection({
-     text = 'Bugs' 
-     side = 'Left'
-    })
-
+    text = 'Bugs',
+    side = 'left'
+})
 
 section1:addSlider({
     text = 'WalkSpeed',
@@ -56,10 +56,6 @@ section1:addButton({
     style = 'large'
 }, function()
     pcall(function()
-        local Players = game:GetService('Players')
-        local RunService = game:GetService('RunService')
-        local UserInputService = game:GetService('UserInputService')
-        local LocalPlayer = Players.LocalPlayer
         local PlayerGui = LocalPlayer:WaitForChild('PlayerGui')
 
         for _, n in ipairs({ 'Closed Fly Gui', 'Fly gui' }) do
@@ -100,8 +96,8 @@ section1:addButton({
 
         local ClosedGui = Instance.new('ScreenGui')
         ClosedGui.Name = 'Closed Fly Gui'
-        ClosedGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
         ClosedGui.ResetOnSpawn = false
+        ClosedGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
         ClosedGui.Parent = PlayerGui
 
         local ClosedFrame = Instance.new('Frame')
@@ -128,9 +124,9 @@ section1:addButton({
 
         local FlyGui = Instance.new('ScreenGui')
         FlyGui.Name = 'Fly gui'
-        FlyGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
         FlyGui.ResetOnSpawn = false
         FlyGui.Enabled = false
+        FlyGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
         FlyGui.Parent = PlayerGui
 
         local FlyFrame = Instance.new('Frame')
@@ -142,7 +138,6 @@ section1:addButton({
         Instance.new('UICorner', FlyFrame)
 
         local SpeedBox = Instance.new('TextBox')
-        SpeedBox.Name = 'Fly speed modifier'
         SpeedBox.Size = UDim2.new(0, 157, 0, 67)
         SpeedBox.Position = UDim2.new(0.25, 0, 0.13, 0)
         SpeedBox.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
@@ -157,7 +152,6 @@ section1:addButton({
         Instance.new('UICorner', SpeedBox)
 
         local OnBtn = Instance.new('TextButton')
-        OnBtn.Name = 'Turn ON button'
         OnBtn.Size = UDim2.new(0, 67, 0, 51)
         OnBtn.Position = UDim2.new(0.04, 0, 0.59, 0)
         OnBtn.BackgroundColor3 = Color3.fromRGB(0, 171, 0)
@@ -170,7 +164,6 @@ section1:addButton({
         Instance.new('UICorner', OnBtn)
 
         local OffBtn = Instance.new('TextButton')
-        OffBtn.Name = 'Turn OFF button'
         OffBtn.Size = UDim2.new(0, 67, 0, 51)
         OffBtn.Position = UDim2.new(0.30, 0, 0.59, 0)
         OffBtn.BackgroundColor3 = Color3.fromRGB(200, 50, 50)
@@ -183,7 +176,6 @@ section1:addButton({
         Instance.new('UICorner', OffBtn)
 
         local KeyBtn = Instance.new('TextButton')
-        KeyBtn.Name = 'Toggle button'
         KeyBtn.Size = UDim2.new(0, 120, 0, 30)
         KeyBtn.Position = UDim2.new(0.08, 0, 0.83, 0)
         KeyBtn.BackgroundColor3 = Color3.fromRGB(0, 171, 0)
@@ -196,7 +188,6 @@ section1:addButton({
         Instance.new('UICorner', KeyBtn)
 
         local CloseBtn = Instance.new('TextButton')
-        CloseBtn.Name = 'Close button'
         CloseBtn.Size = UDim2.new(0, 32, 0, 34)
         CloseBtn.Position = UDim2.new(0.90, 0, 0, 0)
         CloseBtn.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
@@ -256,12 +247,12 @@ section1:addButton({
                     stopFly()
                     return
                 end
-                local cam = workspace.CurrentCamera
-                if not cam then return end
+                local camera = workspace.CurrentCamera
+                if not camera then return end
 
                 local dir = Vector3.zero
-                local look = cam.CFrame.LookVector
-                local right = cam.CFrame.RightVector
+                local look = camera.CFrame.LookVector
+                local right = camera.CFrame.RightVector
 
                 if UserInputService:IsKeyDown(Enum.KeyCode.W) then dir += look end
                 if UserInputService:IsKeyDown(Enum.KeyCode.S) then dir -= look end
@@ -274,7 +265,7 @@ section1:addButton({
                     dir = dir.Unit * flySpeed
                 end
                 bodyVel.Velocity = dir
-                bodyGyro.CFrame = cam.CFrame
+                bodyGyro.CFrame = camera.CFrame
             end)
         end
 
@@ -323,7 +314,6 @@ section1:addButton({
                 waitingForKey = false
                 return
             end
-
             if gp then return end
             if input.KeyCode == flyKey then
                 toggleFly()
@@ -344,7 +334,7 @@ section1:addButton({
     end)
 end)
 
-local TARGET_NAMES = { "Barries" }
+local TARGET_NAMES = { 'Barries' }
 local MATCH_PARTIAL = true
 local autoDelete = false
 local addedConn = nil
@@ -353,7 +343,7 @@ local function parseNames(text)
     local list = {}
     if not text or text == '' then return list end
     for name in string.gmatch(text, '[^,]+') do
-        name = name:match('^%s*(.-)%s*$') -- trim
+        name = name:match('^%s*(.-)%s*$')
         if name ~= '' then
             table.insert(list, name)
         end
@@ -403,18 +393,15 @@ end
 local function startAutoDelete()
     autoDelete = true
     scanAll()
-
     if addedConn then
         addedConn:Disconnect()
         addedConn = nil
     end
-
     addedConn = workspace.DescendantAdded:Connect(function(obj)
         task.defer(function()
             tryDelete(obj)
         end)
     end)
-
     ui.notify({
         title = 'AutoDelete',
         message = 'ON: ' .. table.concat(TARGET_NAMES, ', '),
@@ -428,7 +415,7 @@ local function stopAutoDelete()
         addedConn:Disconnect()
         addedConn = nil
     end
-    ui.notify({ title = 'AutoDeleter', message = 'OFF', duration = 2 })
+    ui.notify({ title = 'AutoDelete', message = 'OFF', duration = 2 })
 end
 
 section2:addLabel({ text = 'Names separated by comma' })
@@ -444,7 +431,6 @@ section2:addTextbox({
             message = table.concat(TARGET_NAMES, ', '),
             duration = 3
         })
-        
         if autoDelete then
             scanAll()
         end
@@ -461,3 +447,9 @@ section2:addToggle({
         stopAutoDelete()
     end
 end)
+
+ui.notify({
+    title = 'LOL HUB/Universal',
+    message = 'Script Loaded',
+    duration = 3
+})
