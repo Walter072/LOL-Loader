@@ -150,8 +150,8 @@ local slider = section1:addSlider({
     min = 16,
     max = 500,
     value = 16,
-    callback = function(val)
-        game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = val
+    callback = function(value)
+        game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = value
     end
 })
 
