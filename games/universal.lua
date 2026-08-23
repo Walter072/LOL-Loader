@@ -426,7 +426,7 @@ end
 section2:addLabel({ text = 'Names separated by comma' })
 
 section2:addTextbox({
-    text = 'Barries'
+    text = '.',
 }):bindToEvent('onFocusLost', function(text)
     local list = parseNames(text)
     if #list > 0 then
@@ -451,4 +451,19 @@ section2:addToggle({
     else
         stopAutoDelete()
     end
+end)
+section1:addButton({
+    text = 'Infinite yield',
+    style = 'small'
+}, function()
+   local ok, err = pcall(function()
+        loadstring(game:HttpGet('https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source'))()
+   end)
+        if ok then
+       ui.notify({ title = 'ok', message = 'Script loaded', duration = 3})
+        else
+       ui.notify({ title = 'error', message = tostring(err), duration = 4})
+
+        
+    end)
 end)
