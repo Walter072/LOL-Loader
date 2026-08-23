@@ -2,14 +2,36 @@ if not game:IsLoaded() then
     game.Loaded:Wait()
 end
 
-local BASE = "https://raw.githubusercontent.com/Walter072/LOL/main/games/" -- here your github repo link, make sure to add the / at the end of the link
+if identifyexecutor then
+    local ok, execName = pcall(function()
+        return tostring(identifyexecutor()):lower()
+    end)
+
+    if ok and execName then
+        if execName:find("solara") or execName:find("xeno") then
+            local lp = game:GetService("Players").LocalPlayer
+            lp:Kick(
+                "EXECUTOR NOT SUPPORTED\n" ..
+                "Xeno / Solara are not supported.\n" ..
+                "Please don't get mad — this is due to their UNC/SUNC limits."
+            )
+            return
+        end
+    end
+end
+
+local BASE = "https://raw.githubusercontent.com/Walter072/LOL/main/games/"
 
 local games = {
     [5088137] = "Da-Backrooms.lua",
     [490911723] = "+1-pickaxe.lua",
     [476287845] = "Be-a-youtuber.lua",
-    [1917531509] = "Crash-or-land.lua", -- here add the name of the file you want to load,and in the numbers put the game creator id.
-}                                        -- use this code for you own loader, just add the game creator id and the file name to the table
+    [1917531509] = "Crash-or-land.lua",
+}
+
+local places = {
+    -- [1234567890] = ".lua",
+}
 
 local file = games[game.CreatorId] or places[game.PlaceId]
 
@@ -23,13 +45,13 @@ local ok, src = pcall(function()
     return game:HttpGet(BASE .. file)
 end)
 
-if ok and src then
+if ok and src and #src > 0 then
     local runOk, err = pcall(function()
         loadstring(src)()
     end)
     if not runOk then
-        warn("Loader Error running:", err)
+        warn("[Loader] Error running:", err)
     end
 else
-    warn("Loader cannot load ", file)
+    warn("[Loader] Cannot load:", file)
 end
