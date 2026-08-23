@@ -145,7 +145,7 @@ LocalPlayer.CharacterAdded:Connect(function()
     end
 end)
 
-local slider = section1:addSlider({
+section1:addSlider({
     text = "WalkSpeed",
     min = 16,
     max = 500,
