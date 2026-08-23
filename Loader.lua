@@ -23,9 +23,9 @@ local games = {
 
 local file = games[game.CreatorId] or places[game.PlaceId]
 
-if file then
-    local url = BASE .. file
-    print("Game detected. Loading:", file)
+if not file then
+    file = "universal.lua"
+end
 
     local ok, result = pcall(function()
         return game:HttpGet(url)
