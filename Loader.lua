@@ -2,16 +2,6 @@ if not game:IsLoaded() then
     game.Loaded:Wait()
 end
 
-if identifyexecutor then
-    local execName = tostring(identifyexecutor()):lower()
-    if execName:find("solara") or execName:find("xeno") then
-        game:GetService("Players").LocalPlayer:Kick(
-            "EXECUTOR NOT SUPPORTED\n[PLEASE DON'T GET MAD THIS IS SOLARA/XENO'S FAULT]" -- here for the executors support xeno/solara is trash but if you want to use u need to add that
-        )
-        return
-    end
-end
-
 local BASE = "https://raw.githubusercontent.com/Walter072/LOL/main/games/" -- here your github repo link, make sure to add the / at the end of the link
 
 local games = {
@@ -27,32 +17,19 @@ if not file then
     file = "universal.lua"
 end
 
-    local ok, result = pcall(function()
-        return game:HttpGet(url)
+print("[Loader] Loading:", file, "CreatorId:", game.CreatorId, "PlaceId:", game.PlaceId)
+
+local ok, src = pcall(function()
+    return game:HttpGet(BASE .. file)
+end)
+
+if ok and src then
+    local runOk, err = pcall(function()
+        loadstring(src)()
     end)
-
-    if ok and result and #result > 0 then
-        local loadOk, loadErr = pcall(function()
-            loadstring(result)()
-        end)
-
-        if loadOk then
-            print("Successfully loaded script")
-        else
-            warn("Error running the script:", loadErr)
-        end
-    else
-        warn("Script not loaded:", url)
+    if not runOk then
+        warn("Loader Error running:", err)
     end
 else
-    warn("This game is not supported")
-    warn("[Loader] CreatorId:", game.CreatorId, "| PlaceId:", game.PlaceId)
-
-    pcall(function()
-        game:GetService("StarterGui"):SetCore("SendNotification", {
-            Title = "Loader",
-            Text = "Game not supported\nCreatorId: " .. tostring(game.CreatorId),
-            Duration = 5
-        })
-    end)
+    warn("Loader cannot load ", file)
 end
