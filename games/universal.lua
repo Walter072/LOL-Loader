@@ -143,15 +143,12 @@ end)
 section1:addSlider({
     text = "WalkSpeed",
     min = 16,
-    max = 500,
+    max = 135,
     value = 16,
     callback = function(value)
-        game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = value
+        local _, hum = getHRP()
+        if hum then
+            hum.WalkSpeed = value
+        end
     end
-})
-
-ui.notify({
-    title = 'Universal Script',
-    message = 'loader loaded successfully',
-    duration = 3
 })
