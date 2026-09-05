@@ -8,11 +8,11 @@ if identifyexecutor then
     end)
 
     if ok and execName then
-        if execName:find("solara") or execName:find("xeno") then
+        if execName:find("xeno") then
             local lp = game:GetService("Players").LocalPlayer
             lp:Kick(
                 "EXECUTOR NOT SUPPORTED\n" ..
-                "Xeno / Solara are not supported.\n" ..
+                "Xeno / are not supported.\n" ..
                 "Please don't get mad — this is due to their UNC/SUNC limits."
             )
             return
