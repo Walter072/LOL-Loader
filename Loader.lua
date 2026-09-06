@@ -41,12 +41,39 @@ if not ok or not list then
     return warn("[LOL Hub] Failed to load keys.lua")
 end
 
+local function b64(s)
+    if crypt and crypt.base64encode then
+        return crypt.base64encode(s)
+    end
+    if base64_encode then
+        return base64_encode(s)
+    end
+    -- fallback: sin ofuscar (solo keys en claro)
+    return s
+end
+
+local key = norm(getgenv().Key)
+if key == "" then
+    return warn("[LOL Hub] Missing getgenv().Key")
+end
+
+local ok, list = pcall(function()
+    return game:HttpGet(KEYS_URL)
+end)
+if not ok or not list then
+    return warn("[LOL Hub] Failed to load keys.txt")
+end
+
+local targetObf = b64(key)
 local allowed = false
 for line in string.gmatch(list, "[^\r\n]+") do
-    local k = norm(line)
-    if k ~= "" and not k:match("^#") and k == key then
-        allowed = true
-        break
+    local lineTrim = line:match("^%s*(.-)%s*$") or ""
+    if lineTrim ~= "" and not lineTrim:match("^#") then
+        local upper = norm(lineTrim)
+        if upper == key or lineTrim == targetObf then
+            allowed = true
+            break
+        end
     end
 end
 
