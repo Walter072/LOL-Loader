@@ -3,8 +3,9 @@ local Players = game:GetService("Players")
 local KEYS_URL = "https://raw.githubusercontent.com/Walter072/LOL-Loader/main/keys.lua"
 
 local Routes = {
-    hub = "https://raw.githubusercontent.com/Walter072/LOL-Hub/refs/heads/main/Hub",
+    hub = "https://raw.githubusercontent.com/Walter072/LOL-Hub/refs/heads/main/Hub.lua",
     Universal_allgames = "https://raw.githubusercontent.com/Walter072/LOL-Loader/main/scripts/Universal_allgames.lua",
+    hub2 = "https://raw.githubusercontent.com/Walter072/LOL-Hub/refs/heads/main/hub2.lua",
 }
 
 local function norm(s)
