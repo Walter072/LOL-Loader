@@ -5,7 +5,7 @@ local KEYS_URL = "https://raw.githubusercontent.com/Walter072/LOL-Loader/main/ke
 local Routes = {
     hub = "https://raw.githubusercontent.com/Walter072/LOL-Hub/refs/heads/main/hub.lua",
     Universal_allgames = "https://raw.githubusercontent.com/Walter072/LOL-Loader/main/scripts/Universal_allgames.lua",
-    hub2 = "https://raw.githubusercontent.com/Walter072/LOL-Hub/refs/heads/main/hub2.lua",
+    kaitun_TDR = "https://raw.githubusercontent.com/Walter072/LOL-Hub/refs/heads/main/kaitun_TDR.lua",
 }
 
 local function norm(s)
